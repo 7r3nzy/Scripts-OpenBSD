@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# To check the status of the battery
+
+remaining=$(sysctl -n hw.sensors.acpibat0.amphour3 | cut -d' ' -f1)
+total=$(sysctl -n hw.sensors.acpibat0.amphour0 | cut -d' ' -f1)
+rate=$(sysctl -n hw.sensors.acpibat0.current0 | cut -d' ' -f1)
+remaining_hours=$(echo "$remaining/$rate" | bc -l)
+remaining_percentage=$(echo "$remaining/$total*100" | bc -l)
+charging_status=$(sysctl -n hw.sensors.acpibat0.raw0 | cut -d' ' -f3 | tr '),' ' ')
+power_supply=$(sysctl -n hw.sensors.acpiac0 | cut -d' ' -f1)
+
+printf "Battery %.2f%%" $remaining_percentage
+
+if [ $charging_status == "charging" ]; then
+	printf " | "
+else
+	printf " (%.2f hours remaining) | " $remaining_hours
+fi
+
+printf "State (%s) | Power Supply %s" $charging_status $power_supply
+echo ""

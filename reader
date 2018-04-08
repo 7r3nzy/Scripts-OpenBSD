@@ -1,0 +1,23 @@
+#!/bin/sh
+
+user=$(id -u)
+
+if [ $user == 0 ]; then
+	echo "Run as normal user"
+	exit 1	
+fi
+
+page=0
+
+pdfpath=$1
+pdfname=$(basename $1)
+mupdfdir="$HOME/.cache/mupdf"
+tempfile="$mupdfdir/$pdfname"
+if [ -f $tempfile ]; then
+	page=$(tail -n1 $tempfile | rev | cut -d' ' -f3 | rev | cut -d'/' -f1)
+fi
+
+mupdf $pdfpath $page &
+sleep 5
+win_id=$(xwininfo -children -root | grep '"mupdf" "MuPDF"' | cut -d' ' -f6)
+xprop -id $win_id -spy WM_NAME > $tempfile

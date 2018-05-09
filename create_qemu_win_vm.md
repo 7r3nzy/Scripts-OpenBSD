@@ -10,3 +10,7 @@ qemu-system-x86_64  -m 2048 -cdrom /dev/cd0a -boot d -monitor stdio win7.hd
 
 qemu-img resize win7.hd [+|-]size
 
+#for host port to guest ssh port
+
+qemu-system-x86_64 -nic hostfwd=tcp::2222-:22
+

@@ -11,7 +11,7 @@ for i in "${tasks[@]:1:tlength-2}"; do
   echo '  {'
   printf '    "name": %s,\n' $i
   echo '    "details": "", '
-  echo '    "color": "FFFFFF",'
+  echo '    "color": "FFFFFF"'
   echo '  },'
 done
 echo ']'
